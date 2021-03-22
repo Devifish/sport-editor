@@ -45,7 +45,8 @@ export async function loginByPassword(username, password) {
     }
     throw new Error("获取登录授权码失败");
   } catch (e) {
-    console.log("登录失败， 请检查账号密码", e.message);
+    console.error("登录失败， 请检查账号密码");
+    throw e;
   }
 }
 
@@ -97,13 +98,14 @@ export async function getAccessToken(code) {
     console.log(`获取AccessToken成功 token: ${token_info.login_token}`);
     return token_info;
   } catch (e) {
-    console.log("获取AccessToken失败", e.message);
+    console.error("获取AccessToken失败");
+    throw e;
   }
 }
 
-export async function pushBandData(step, token_info) {
+export async function pushBandData(step, user_id, app_token) {
   const data = toUrlEncode({
-    userid: token_info.user_id,
+    userid: user_id,
     last_sync_data_time: 1597306380,
     device_type: 0,
     last_deviceid: "DA932FFFFE8816E7",
@@ -116,24 +118,25 @@ export async function pushBandData(step, token_info) {
       data,
       {
         headers: {
-          apptoken: token_info.app_token,
+          apptoken: app_token,
         },
       }
     );
 
     console.log(`修改步数${step}成功`);
   } catch (e) {
-    console.log("修改步数失败", e.message);
+    console.error("修改步数失败");
+    throw e;
   }
 }
 
-export async function buildDataJson(step) {
+async function buildDataJson(step) {
   const time = Moment().format("YYYY-MM-DD");
   const find_date = /.*?date":"(.*?)","data.*?/;
-  const find_sted = /.*?ttl\\":(.*?),\\"dis.*?/;
+  const find_step = /.*?ttl\\":(.*?),\\"dis.*?/;
 
   let data_json = await fs.readFile("./data.json", "utf-8");
   data_json = data_json.replace(find_date.exec(data_json)[1], time);
-  data_json = data_json.replace(find_sted.exec(data_json)[1], step);
+  data_json = data_json.replace(find_step.exec(data_json)[1], step);
   return data_json;
 }

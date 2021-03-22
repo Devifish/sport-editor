@@ -5,12 +5,11 @@ name: sport-editor-task
 
 on:
   workflow_dispatch: # 手动触发
-  schedule: # 计划任务触发
-    - cron: '1 * * * *'
+  schedule: # 计划任务触发 (UTC时区 H+8)
+    - cron: "0 4 * * *" 
 
 jobs:
-  build:
-
+  run-sport-editor:
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,28 +18,29 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
-    
-    # 设置服务器时区为东八区 
-    - name: Set time zone
-      run: sudo timedatectl set-timezone 'Asia/Shanghai'
-    
-    # Node.js 环境
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    
-    # 安装Npm依赖
-    - name: Install dependencies
-      run: npm install
-    
-    # 运行
-    - name: Run APP
-      env:
-        XIAOMI_AMAZFIT_USERNAME: ${{secrets.USERNAME}}
-        XIAOMI_AMAZFIT_PASSWORD: ${{secrets.PASSWORD}}
-        XIAOMI_AMAZFIT_TOKEN: ${{secrets.TOKEN}}
-        STED_SIZE_RANGE: ${{secrets.STED_SIZE_RANGE}}
-        
-      run: npm run start
+      - uses: actions/checkout@v2
+
+      # 设置服务器时区为东八区
+      - name: Set time zone
+        run: sudo timedatectl set-timezone 'Asia/Shanghai'
+
+      # Node.js 环境
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # 安装Npm依赖
+      - name: Install dependencies
+        run: npm install
+
+      # 运行
+      - name: Run APP
+        env:
+          XIAOMI_AMAZFIT_USERNAME: ${{secrets.XIAOMI_AMAZFIT_USERNAME}}
+          XIAOMI_AMAZFIT_PASSWORD: ${{secrets.XIAOMI_AMAZFIT_PASSWORD}}
+          XIAOMI_AMAZFIT_USER_ID: ${{secrets.XIAOMI_AMAZFIT_USER_ID}}
+          XIAOMI_AMAZFIT_APP_TOKEN: ${{secrets.XIAOMI_AMAZFIT_APP_TOKEN}}
+          STED_SIZE_RANGE: ${{secrets.STED_SIZE_RANGE}}
+
+        run: npm run start
