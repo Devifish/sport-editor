@@ -1,0 +1,16 @@
+{
+  "name": "sport-editor",
+  "version": "1.0.0",
+  "description": "",
+  "author": "devifish",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "moment": "^2.29.1"
+  }
+}
