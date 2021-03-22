@@ -21,7 +21,7 @@
 
 - 推荐使用 Node.js 12 及以上的运行/构建当前项目
 - 运动步数范围使用 - 分隔上下限
--
+- 可选账号/密码、UserID/AppToken 两种方式运行
 
 ## Github Actions 部署
 
