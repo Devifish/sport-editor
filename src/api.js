@@ -1,7 +1,8 @@
 import Axios from "axios";
-import Moment from "moment";
-import { toUrlEncode } from "./common.js";
+import dayjs from "dayjs";
 import fs from "fs/promises";
+import { toUrlEncode } from "./common.js";
+import * as log from "./log.js";
 
 // 公共头
 const COMMON_HEADERS = {
@@ -33,19 +34,19 @@ export async function loginByPassword(username, password) {
       `https://api-user.huami.com/registrations/+86${username}/tokens`,
       data
     );
-    console.log("登录成功, 开始获取登录授权码");
+    log.info("登录成功, 开始获取登录授权码");
 
     // 获取Code
     const path = new URL(res.request.path, redirect_uri);
     const params = path.searchParams;
     if (params.has("access")) {
       const code = params.get("access");
-      console.log(`获取登录授权码成功 code: ${code}`);
+      log.info(`获取登录授权码成功 code: ${code}`);
       return code;
     }
     throw new Error("获取登录授权码失败");
   } catch (e) {
-    console.error("登录失败， 请检查账号密码");
+    log.error("登录失败， 请检查账号密码");
     throw e;
   }
 }
@@ -95,10 +96,10 @@ export async function getAccessToken(code) {
     const res = await axios.post("https://account.huami.com/v2/client/login", data);
 
     const token_info = res.data.token_info;
-    console.log(`获取AccessToken成功 token: ${token_info.login_token}`);
+    log.info(`获取AccessToken成功 token: ${token_info.login_token}`);
     return token_info;
   } catch (e) {
-    console.error("获取AccessToken失败");
+    log.error("获取AccessToken失败");
     throw e;
   }
 }
@@ -123,15 +124,15 @@ export async function pushBandData(step, user_id, app_token) {
       }
     );
 
-    console.log(`修改步数${step}成功`);
+    log.info(`上传步数成功 step：${step}`);
   } catch (e) {
-    console.error("修改步数失败");
+    log.error("上传步数失败");
     throw e;
   }
 }
 
 async function buildDataJson(step) {
-  const time = Moment().format("YYYY-MM-DD");
+  const time = dayjs().format("YYYY-MM-DD");
   const find_date = /.*?date":"(.*?)","data.*?/;
   const find_step = /.*?ttl\\":(.*?),\\"dis.*?/;
 
