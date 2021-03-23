@@ -1,5 +1,9 @@
 # 运动步数修改工具
 
+[![sport-editor-task](https://github.com/Devifish/sport-editor/actions/workflows/sport-editor-task.yml/badge.svg)](https://github.com/Devifish/sport-editor/actions/workflows/sport-editor-task.yml)
+[![star](https://img.shields.io/github/stars/Devifish/sport-editor.svg?logo=github)](https://github.com/Devifish/sport-editor)
+[![license](https://img.shields.io/github/license/Devifish/sport-editor)](https://github.com/Devifish/sport-editor)
+
 > 通过华米运动的 API 提交运动步数 😒<br/>
 > 可实现同步运动步数至热门平台，如微信、支付宝等
 
