@@ -12,7 +12,7 @@ const COMMON_HEADERS = {
 
 // 初始化请求工具
 const axios = Axios.create({
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     ...COMMON_HEADERS,
   },
